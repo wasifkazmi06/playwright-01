@@ -1,7 +1,9 @@
+import os
+
 import allure
 import pytest
 from allure_commons.types import AttachmentType
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Page
 from utilities import configReader
 
 
@@ -27,7 +29,7 @@ def setup_function(page):
 
 @pytest.fixture(scope="function")
 def page(browser):
-    context = browser.new_context(record_video_dir="videos/")
+    context = browser.new_context(record_video_dir="report/videos/")
     # Start tracing before creating / navigating a page.
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     global page
@@ -41,10 +43,20 @@ def page(browser):
     context.close()
 
 
-@pytest.fixture()
-def log_on_failure(request):
-    yield
-    item = request.node
-    if item.rep_call.failed:
-        allure.attach(page.screenshot(path="screenshot/fullpage.png"), name="failurescreenshot",
-                      attachment_type=AttachmentType.PNG)
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+
+    if rep.when == "call" and rep.failed:
+        # Assuming 'page' fixture is available and provides a Playwright Page object
+        # You might need to adjust how you get the 'page' object based on your test setup.
+        try:
+            page: Page = item.funcargs['page'] # Access the page object from the fixture
+            screenshot_dir = "report/failed_screenshots"
+            os.makedirs(screenshot_dir, exist_ok=True)
+            screenshot_path = os.path.join(screenshot_dir, f"{item.name}_failure.png")
+            page.screenshot(path=screenshot_path)
+            print(f"\nScreenshot saved for failed test: {screenshot_path}")
+        except Exception as e:
+            print(f"\nCould not take screenshot on failure: {e}")

@@ -15,4 +15,5 @@ class TestSearchNewCars(BaseTest):
             home.find_new_cars()
             new_car = NewCarsPage(page)
             expect(new_car.toyota_new_cars).to_be_visible()
+            expect(new_car.read_more_link).to_be_disabled()
             #home.go_to_toyota(page)
