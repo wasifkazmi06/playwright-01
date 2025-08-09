@@ -1,4 +1,5 @@
 from playwright.sync_api import Page
+from pages.NewCarsPage import NewCarsPage
 
 
 class HomePage:
@@ -13,6 +14,8 @@ class HomePage:
     def find_new_cars(self):
         self.new_cars.click()
         self.search_new_cars.click()
+
+        return NewCarsPage(self.page)
 
     def go_to_used_cars(self):
         pass

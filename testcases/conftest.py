@@ -30,15 +30,13 @@ def setup_function(page):
 @pytest.fixture(scope="function")
 def page(browser):
     context = browser.new_context(record_video_dir="report/videos/")
-    # Start tracing before creating / navigating a page.
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     global page
     page = context.new_page()
     page.set_viewport_size({"width": 1920, "height": 1080})
     yield page
     page.wait_for_timeout(2000)
-    # Stop tracing and export it into a zip archive.
-    context.tracing.stop(path="trace.zip")
+    context.tracing.stop(path="report/trace.zip")
     page.close()
     context.close()
 
@@ -49,14 +47,14 @@ def pytest_runtest_makereport(item, call):
     rep = outcome.get_result()
 
     if rep.when == "call" and rep.failed:
-        # Assuming 'page' fixture is available and provides a Playwright Page object
-        # You might need to adjust how you get the 'page' object based on your test setup.
         try:
-            page: Page = item.funcargs['page'] # Access the page object from the fixture
+            page: Page = item.funcargs['page']
             screenshot_dir = "report/failed_screenshots"
             os.makedirs(screenshot_dir, exist_ok=True)
             screenshot_path = os.path.join(screenshot_dir, f"{item.name}_failure.png")
             page.screenshot(path=screenshot_path)
+            allure.attach(page.screenshot(path=screenshot_path), name="failure_screenshot",
+                          attachment_type=AttachmentType.PNG)
             print(f"\nScreenshot saved for failed test: {screenshot_path}")
         except Exception as e:
             print(f"\nCould not take screenshot on failure: {e}")
