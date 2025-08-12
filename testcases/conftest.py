@@ -7,7 +7,7 @@ from playwright.sync_api import sync_playwright, Page
 from utilities import configReader
 
 
-@pytest.fixture(params=["chrome"], scope="function")
+@pytest.fixture(scope="function")
 def browser(request):
     browser_type = request.param
 
