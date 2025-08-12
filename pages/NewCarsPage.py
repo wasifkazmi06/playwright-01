@@ -10,7 +10,7 @@ class NewCarsPage:
         self.page = page
         self.toyota_new_cars = page.get_by_role("link", name="Toyota Cars Toyota")
         self.bmw_new_cars = page.get_by_role("link", name="BMW Cars BMW")
-        self.hyundai_new_cars = page.get_by_role("link", name="Honda Cars Honda")
+        self.hyundai_new_cars = page.get_by_role("link", name="Hyundai Cars Hyundai")
         self.mg_new_cars = page.get_by_role("link", name="MG Cars MG")
         self.read_more_link = page.get_by_label("Read More")
 
@@ -23,7 +23,7 @@ class NewCarsPage:
         return BMWNewCarsPage(self.page)
 
     def go_to_hyundai(self):
-        self.honda_new_cars.click()
+        self.hyundai_new_cars.click()
         return HyundaiNewCarsPage(self.page)
 
     def go_to_mg(self):

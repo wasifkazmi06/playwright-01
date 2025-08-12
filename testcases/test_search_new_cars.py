@@ -27,20 +27,20 @@ class TestSearchNewCars(BaseTest):
 
     @allure.feature("Find New Cars Test")
     @allure.severity(allure.severity_level.NORMAL)
-    @pytest.mark.parametrize("carBrand", dataProvider.get_data("NewCarsTest"))
-    def test_finding_new_cars_other_brands(self, page, carBrand):
+    @pytest.mark.parametrize("car_brand, car_title", dataProvider.read_csv_data("car_data_csv_path"))
+    def test_finding_new_cars_other_brands(self, page, car_brand, car_title):
         with allure.step("*****Executing Finding New Cars Other Brands Test*****"):
             home = HomePage(page)
             home.find_new_cars()
-            if carBrand == "BMW":
+            print(car_brand, car_title)
+            if car_brand == "BMW":
                 home.find_new_cars().go_to_bmw()
-                expect(home.find_new_cars().go_to_bmw().bmw_brand_heading).to_be_visible()
-            elif carBrand == "Hyundai":
+                expect(home.find_new_cars().go_to_bmw().bmw_brand_heading).to_have_text(car_title)
+            elif car_brand == "Hyundai":
                 home.find_new_cars().go_to_hyundai()
-                expect(home.find_new_cars().go_to_hyundai().hyundai_brand_heading).to_be_visible()
-            elif carBrand == "MG":
+                expect(home.find_new_cars().go_to_hyundai().hyundai_brand_heading).to_have_text(car_title)
+            elif car_brand == "MG":
                 home.find_new_cars().go_to_mg()
-                expect(home.find_new_cars().go_to_mg().mg_brand_heading).to_be_visible()
+                expect(home.find_new_cars().go_to_mg().mg_brand_heading).to_have_text(car_title)
             else:
                 print("Incorrect car brand!")
-

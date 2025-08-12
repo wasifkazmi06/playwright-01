@@ -29,9 +29,9 @@ def setCellData(path, sheetName, rowNum, colNum, data):
 
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Directory where configReader.py is located
-path = os.path.join(BASE_DIR, "..", "excel", "testdata.xlsx")  # Navigate to conf.ini
+path = os.path.join(BASE_DIR, "..", "testdata", "testdata.xlsx")  # Navigate to conf.ini
 
-# path = "..//excel//testdata.xlsx"
+# path = "..//testdata//testdata.xlsx"
 sheetName = "LoginTest"
 
 rows = getRowCount(path, sheetName)

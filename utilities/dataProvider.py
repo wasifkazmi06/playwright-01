@@ -1,12 +1,16 @@
+import csv
 import os
-
 import openpyxl
+import pandas
+
+from utilities import configReader
+
 
 def get_data(sheetName):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # Directory where configReader.py is located
-    EXCEL_PATH = os.path.join(BASE_DIR, "..", "excel", "testdata.xlsx")  # Navigate to conf.ini
+    EXCEL_PATH = os.path.join(BASE_DIR, "..", "testdata", "testdata.xlsx")  # Navigate to conf.ini
 
-    #workbook = openpyxl.load_workbook("excel//testdata.xlsx")
+    # workbook = openpyxl.load_workbook("testdata//testdata.xlsx")
     workbook = openpyxl.load_workbook(EXCEL_PATH)
     sheet = workbook[sheetName]
     totalrows = sheet.max_row
@@ -20,3 +24,26 @@ def get_data(sheetName):
             dataList.insert(j, data)
         mainList.insert(i, dataList)
     return mainList
+
+
+def get_data_from_csv(file):
+    file_path = configReader.readConfig("data_files", file)
+    file = csv.DictReader(open(file_path))
+    data = []
+    for element in file:
+        data.append(element)
+    print(data)
+    return data
+
+
+def read_csv_data(file):
+    file_path = configReader.readConfig("data_files", file)
+    data = []
+    with open(file_path, "r") as csv_file:
+        reader = csv.reader(csv_file, delimiter=',')
+        next(reader)
+        for row in reader:
+            data.append(tuple(row))
+    return data
+
+

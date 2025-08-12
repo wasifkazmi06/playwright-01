@@ -1,6 +1,7 @@
 import os
 
 import allure
+import pandas
 import pytest
 from allure_commons.types import AttachmentType
 from playwright.sync_api import sync_playwright, Page
@@ -39,6 +40,17 @@ def page(browser):
     context.tracing.stop(path="report/trace.zip")
     page.close()
     context.close()
+
+
+@pytest.fixture(scope="session")
+def read_csv_data_panda(file):
+    file_path = configReader.readConfig("data_files", file)
+    data = []
+    df = pandas.read_csv(file_path)
+    for row in df:
+        data.append(row)
+    print(data)
+    return data
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
