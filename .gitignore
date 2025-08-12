@@ -1,7 +1,4 @@
 venv/
-
 testcases/report
-
-trace.zip
-
+report
 allure-results

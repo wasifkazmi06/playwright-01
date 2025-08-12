@@ -10,6 +10,8 @@ class TestSearchNewCars(BaseTest):
 
     @allure.feature("Find New Cars Test")
     @allure.severity(allure.severity_level.MINOR)
+    @pytest.mark.parametrize("page, browser", [(("url", "car_wale_url"), "chrome"),
+                                               (("url", "car_wale_url"), "firefox")], indirect=True)
     def test_finding_new_cars(self, page):
         with allure.step("*****Executing Finding New Cars Test*****"):
             home = HomePage(page)
@@ -19,6 +21,8 @@ class TestSearchNewCars(BaseTest):
 
     @allure.feature("Find New Cars Test")
     @allure.severity(allure.severity_level.MINOR)
+    @pytest.mark.parametrize("page, browser", [(("url", "car_wale_url"), "chrome"),
+                                               (("url", "car_wale_url"), "firefox")], indirect=True)
     def test_finding_new_toyota_cars(self, page):
         with allure.step("*****Executing Finding New Toyota Cars Test*****"):
             home = HomePage(page)
@@ -28,6 +32,8 @@ class TestSearchNewCars(BaseTest):
     @allure.feature("Find New Cars Test")
     @allure.severity(allure.severity_level.NORMAL)
     @pytest.mark.parametrize("car_brand, car_title", dataProvider.read_csv_data("car_data_csv_path"))
+    @pytest.mark.parametrize("page, browser", [(("url", "car_wale_url"), "chrome"),
+                                               (("url", "car_wale_url"), "firefox")], indirect=True)
     def test_finding_new_cars_other_brands(self, page, car_brand, car_title):
         with allure.step("*****Executing Finding New Cars Other Brands Test*****"):
             home = HomePage(page)

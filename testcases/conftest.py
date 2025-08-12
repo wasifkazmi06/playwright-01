@@ -1,5 +1,4 @@
 import os
-
 import allure
 import pandas
 import pytest
@@ -23,18 +22,15 @@ def browser(request):
         browser.close()
 
 
-@pytest.fixture(autouse=True)
-def setup_function(page):
-    page.goto(configReader.readConfig("basic info", "testsiteurl"))
-
-
 @pytest.fixture(scope="function")
-def page(browser):
+def page(browser, request):
     context = browser.new_context(record_video_dir="report/videos/")
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     global page
     page = context.new_page()
     page.set_viewport_size({"width": 1920, "height": 1080})
+    section, url = request.param
+    page.goto(configReader.readConfig(section, url))
     yield page
     page.wait_for_timeout(2000)
     context.tracing.stop(path="report/trace.zip")
